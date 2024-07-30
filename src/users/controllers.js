@@ -1,4 +1,5 @@
 const User = require("./model");
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 const createUser = async (req, res) => {
   console.log("Request Body: ", req.body);
@@ -25,7 +26,6 @@ const createUser = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -47,20 +47,64 @@ const login = async (req, res) => {
   }
 };
 
-
 const updateAccount = async (req, res) => {
   try {
-    const filterObj = { id: req.body.id };
-    const updateObj = { [req.body.updateKey]: req.body.updateValue };
+    const { id, username, email, password } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const user = await User.findOne({ where: { id } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const updateObj = {};
+
+    if (username) {
+      if (user.username === username) {
+        return res
+          .status(400)
+          .json({ message: "New username is the same as the old username" });
+      }
+      updateObj.username = username;
+    }
+
+    if (email) {
+      if (user.email === email) {
+        return res
+          .status(400)
+          .json({ message: "New email is the same as the old email" });
+      }
+      updateObj.email = email;
+    }
+
+    if (password) {
+      const isSamePassword = await bcrypt.compare(password, user.password);
+      if (isSamePassword) {
+        return res
+          .status(400)
+          .json({ message: "New password is the same as the old password" });
+      }
+      const salt = await bcrypt.genSalt(saltRounds);
+      updateObj.password = await bcrypt.hash(password, salt);
+    }
+
+    if (Object.keys(updateObj).length === 0) {
+      return res.status(400).json({ message: "No valid fields to update" });
+    }
 
     await User.update(updateObj, {
-      where: filterObj,
+      where: { id },
     });
-    const updatedAcc = await User.findOne({ where: filterObj });
 
-    res.status(200).json({ message: "success", updatedAcc: updatedAcc });
+    const updatedAcc = await User.findOne({ where: { id } });
+
+    res.status(200).json({ message: "Success", updatedAcc });
   } catch (err) {
-    res.status(501).json({ message: err.message, err: err });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -69,4 +113,3 @@ module.exports = {
   login,
   updateAccount,
 };
-
