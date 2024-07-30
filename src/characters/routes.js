@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const charRouter = Router();
 
-const {} = require("./controllers");
+const { addCharacter } = require("./controllers");
+
+charRouter.post("/addCharacter", addCharacter);
 
 module.exports = charRouter;
