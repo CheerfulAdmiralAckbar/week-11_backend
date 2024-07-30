@@ -25,6 +25,7 @@ const createUser = async (req, res) => {
   }
 };
 
+
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -46,4 +47,26 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { createUser, login: login };
+
+const updateAccount = async (req, res) => {
+  try {
+    const filterObj = { id: req.body.id };
+    const updateObj = { [req.body.updateKey]: req.body.updateValue };
+
+    await User.update(updateObj, {
+      where: filterObj,
+    });
+    const updatedAcc = await User.findOne({ where: filterObj });
+
+    res.status(200).json({ message: "success", updatedAcc: updatedAcc });
+  } catch (err) {
+    res.status(501).json({ message: err.message, err: err });
+  }
+};
+
+module.exports = {
+  createUser,
+  login,
+  updateAccount,
+};
+
