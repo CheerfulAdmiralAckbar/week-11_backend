@@ -18,6 +18,10 @@ const Character = sequelize.define('character', {
   description: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  book: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   tableName: 'characters',
