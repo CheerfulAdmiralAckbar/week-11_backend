@@ -16,8 +16,8 @@ app.get('/health', (req, res) => {
 })
 
 const syncTables = async () => {
-  await User.sync({ alter: true });
-  await Character.sync({ alter: true });
+  await User.sync();
+  await Character.sync();
 }
 
 app.listen(port, () => {
