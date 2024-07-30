@@ -34,21 +34,21 @@ const User = sequelize.define('user', {
 });
 
 
-// Hash the user password before adding it to the database
-User.beforeCreate(async (user) => {
-  user.password = await bcrypt.hash(user.password, saltRounds);
-});
+// // Hash the user password before adding it to the database
+// User.beforeCreate(async (user) => {
+//   user.password = await bcrypt.hash(user.password, saltRounds);
+// });
 
-// Compare the user's password to the hashed password in the database
-User.prototype.isMatch = async function(password) {
-  return bcrypt.compare(password, this.password);
-};
+// // Compare the user's password to the hashed password in the database
+// User.prototype.isMatch = async function(password) {
+//   return bcrypt.compare(password, this.password);
+// };
 
-// Remove the password from the JSON response
-User.prototype.toJSON = function () {
-  const values = { ...this.get() };
-  delete values.password;
-  return values;
-};
+// // Remove the password from the JSON response
+// User.prototype.toJSON = function () {
+//   const values = { ...this.get() };
+//   delete values.password;
+//   return values;
+// };
 
 module.exports = User;
