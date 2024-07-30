@@ -25,6 +25,29 @@ const createUser = async (req, res) => {
   }
 };
 
+
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.scope("withPassword").findOne({
+      where: { username },
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "user not found" });
+    }
+    const isMatch = await user.isMatch(password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Password is incorrect" });
+    }
+    res.status(201).json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error.message, error: error });
+  }
+};
+
+
 const updateAccount = async (req, res) => {
   try {
     const filterObj = { id: req.body.id };
@@ -43,5 +66,7 @@ const updateAccount = async (req, res) => {
 
 module.exports = {
   createUser,
+  login,
   updateAccount,
 };
+
