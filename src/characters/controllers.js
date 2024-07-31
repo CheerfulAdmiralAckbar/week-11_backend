@@ -28,8 +28,18 @@ const deleteCharacter = async (req, res) => {
     res.status(501).json({ message: error.message, error: error });
   }
 };
+const getAllCharacters = async (req, res) => {
+  try {
+    const characters = await Character.findAll();
+
+    res.status(200).json({ message: "success", characters: characters });
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+};
 
 module.exports = {
   addCharacter: addCharacter,
-  deleteCharacter: deleteCharacter
+  deleteCharacter: deleteCharacter,
+  getAllCharacters: getAllCharacters,
 };
