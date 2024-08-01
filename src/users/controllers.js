@@ -41,7 +41,8 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Password is incorrect" });
     }
-    res.status(201).json({ message: "success" });
+
+    res.status(201).json({ message: "success", user });
   } catch (error) {
     res.status(500).json({ message: error.message, error: error });
   }
@@ -114,13 +115,12 @@ const deleteAccount = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    await User.destroy({where:{id:id}});
+    await User.destroy({ where: { id: id } });
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 module.exports = {
   createUser,

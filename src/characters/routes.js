@@ -1,11 +1,13 @@
 const { Router } = require("express");
 const charRouter = Router();
 
-const { addCharacter, deleteCharacter, updateCharacter } = require("./controllers");
+const { addCharacter, deleteCharacter, updateCharacter, getCharacter } = require("./controllers");
 
 charRouter.post("/addCharacter", addCharacter);
 
-charRouter.delete("/deletecharacter/:name", deleteCharacter)
+charRouter.delete("/deleteCharacter/:name", deleteCharacter)
+
+charRouter.get("/getCharacter/:name", getCharacter);
 
 charRouter.put("/updateCharacter/:name", updateCharacter);
 
