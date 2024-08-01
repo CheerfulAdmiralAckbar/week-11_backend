@@ -40,7 +40,7 @@ const login = async (req, res) => {
     const isMatch = await user.isMatch(password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Password is incorrect" });
+      return res.status(400).json({ error: "error", message: "Password is incorrect" });
     }
 
     res.status(201).json({ message: "success", user });
