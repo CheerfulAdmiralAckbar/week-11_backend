@@ -1,3 +1,4 @@
+const Character = require("../characters/model");
 const User = require("./model");
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
@@ -121,6 +122,8 @@ const deleteAccount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 module.exports = {
   createUser,
