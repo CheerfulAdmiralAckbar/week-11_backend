@@ -16,7 +16,6 @@ app.use(cors());
 app.use(express.json());
 app.use("/users", userRouter);
 app.use("/char", charRouter);
-
 const syncTables = async () => {
   await User.sync();
   await Character.sync();
