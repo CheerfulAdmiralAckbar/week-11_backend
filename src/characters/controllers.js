@@ -11,6 +11,22 @@ const addCharacter = async (req, res) => {
   }
 };
 
+const updateCharacter = async (req, res) => {
+  try {
+    const updateInformation = await Character.update(req.body.updateFields, {
+      where: {
+        name: req.params.name,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ message: "Successfully updated character information" });
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+};
+
 const deleteCharacter = async (req, res) => {
   const { name } = req.params;
 
@@ -31,5 +47,6 @@ const deleteCharacter = async (req, res) => {
 
 module.exports = {
   addCharacter: addCharacter,
-  deleteCharacter: deleteCharacter
+  deleteCharacter: deleteCharacter,
+  updateCharacter: updateCharacter,
 };
