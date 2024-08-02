@@ -14,11 +14,16 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/users", userRouter);
 app.use("/char", charRouter);
+
 const syncTables = async () => {
   await User.sync();
   await Character.sync();
+
+  User.hasMany(Character);
+  Character.belongsTo(User);
 };
 
 app.get("/health", (req, res) => {

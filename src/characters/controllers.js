@@ -55,7 +55,6 @@ const getAllCharacters = async (req, res) => {
 };
 
 const getCharacter = async (req, res) => {
-
   try {
     const character = await Character.findOne({
       where: { name: req.params.name },
@@ -65,7 +64,7 @@ const getCharacter = async (req, res) => {
       return res.status(404).json({ message: "Character not found" });
     }
 
-    res.status(200).json({ message: "Success", character});
+    res.status(200).json({ message: "Success", character });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
@@ -74,10 +73,7 @@ const getCharacter = async (req, res) => {
 module.exports = {
   addCharacter: addCharacter,
   deleteCharacter: deleteCharacter,
-
   updateCharacter: updateCharacter,
-
   getAllCharacters: getAllCharacters,
-
-  getCharacter: getCharacter
+  getCharacter: getCharacter,
 };
