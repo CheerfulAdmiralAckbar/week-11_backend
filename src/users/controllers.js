@@ -114,8 +114,8 @@ const updateAccount = async (req, res) => {
   }
 };
 const deleteAccount = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
