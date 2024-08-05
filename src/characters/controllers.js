@@ -57,7 +57,9 @@ const getAllCharacters = async (req, res) => {
 const getCharacter = async (req, res) => {
   try {
     const character = await Character.findOne({
-      where: { name: req.params.name },
+      where: {
+        name: req.params.name,
+      },
     });
 
     if (!character) {

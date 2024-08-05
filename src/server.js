@@ -19,8 +19,8 @@ app.use("/users", userRouter);
 app.use("/char", charRouter);
 
 const syncTables = async () => {
-  await User.sync();
-  await Character.sync();
+  await User.sync({ alter: true });
+  await Character.sync({ alter: true });
 
   User.hasMany(Character);
   Character.belongsTo(User);
