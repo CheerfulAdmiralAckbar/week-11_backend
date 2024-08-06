@@ -1,4 +1,3 @@
-const Character = require("../characters/model");
 const User = require("./model");
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
@@ -35,8 +34,9 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      res.status(404).json({ message: "user not found" });
+      return res.status(404).json({ message: "user not found" });
     }
+
     const isMatch = await user.isMatch(password);
 
     if (!isMatch) {
@@ -45,11 +45,11 @@ const login = async (req, res) => {
         .json({ error: "error", message: "Password is incorrect" });
     }
 
-    const characters = await user.getCharacters();
-
-    res.status(201).json({ message: "success", user, characters });
+    res.status(201).json({ message: "success", user });
   } catch (error) {
-    res.status(500).json({ message: error.message, error: error });
+    if (!res.headersSent) {
+      res.status(500).json({ message: error.message, error: error });
+    }
   }
 };
 
