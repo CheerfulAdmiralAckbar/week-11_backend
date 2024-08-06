@@ -44,6 +44,7 @@ const deleteCharacter = async (req, res) => {
     res.status(501).json({ message: error.message, error: error });
   }
 };
+
 const getAllCharacters = async (req, res) => {
   try {
     const characters = await Character.findAll();
