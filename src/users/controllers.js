@@ -40,10 +40,14 @@ const login = async (req, res) => {
     const isMatch = await user.isMatch(password);
 
     if (!isMatch) {
-      return res.status(400).json({ error: "error", message: "Password is incorrect" });
+      return res
+        .status(400)
+        .json({ error: "error", message: "Password is incorrect" });
     }
 
-    res.status(201).json({ message: "success", user });
+    const characters = await user.getCharacters();
+
+    res.status(201).json({ message: "success", user, characters });
   } catch (error) {
     res.status(500).json({ message: error.message, error: error });
   }
@@ -123,8 +127,6 @@ const deleteAccount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
 
 module.exports = {
   createUser,
