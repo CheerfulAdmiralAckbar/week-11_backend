@@ -45,7 +45,9 @@ const login = async (req, res) => {
         .json({ error: "error", message: "Password is incorrect" });
     }
 
-    res.status(201).json({ message: "success", user });
+    const characters = await user.getCharacters();
+
+    res.status(201).json({ message: "success", user, characters });
   } catch (error) {
     if (!res.headersSent) {
       res.status(500).json({ message: error.message, error: error });
