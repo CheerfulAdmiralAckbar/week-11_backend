@@ -97,7 +97,7 @@ const getCharactersByName = async (req, res) => {
       return res.status(404).json({ message: "No characters found" });
     }
 
-    res, status(200).json({ message: "Success", characters });
+    res. status(200).json({ message: "Success", characters });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
