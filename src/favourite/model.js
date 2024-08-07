@@ -13,23 +13,22 @@ const Favourite = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
     },
-    characterName: {
-      type: DataTypes.STRING,
+    characterId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'characters',
-        key: 'name',
-      },
     },
   },
   {
     tableName: "favourites",
     modelName: "favourite",
+    // Stop userId and characterId to prevent duplicate favouriting
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'characterId']
+      }
+    ]
   }
 );
 

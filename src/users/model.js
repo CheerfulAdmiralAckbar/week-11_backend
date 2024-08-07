@@ -33,23 +33,19 @@ const User = sequelize.define(
         attributes: {},
       },
     },
-    // Fix for SQL error with table name
     tableName: "users",
     modelName: "user",
   }
 );
 
-// // Hash the user password before adding it to the database
 User.beforeCreate(async (user) => {
   user.password = await bcrypt.hash(user.password, saltRounds);
 });
 
-// // Compare the user's password to the hashed password in the database
 User.prototype.isMatch = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-// // Remove the password from the JSON response
 User.prototype.toJSON = function () {
   const values = { ...this.get() };
   delete values.password;
@@ -60,7 +56,7 @@ User.associate = (models) => {
   User.belongsToMany(models.Character, {
     through: Favourite,
     foreignKey: 'userId',
-    otherKey: 'characterName',
+    otherKey: 'characterId',
   });
 };
 

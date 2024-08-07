@@ -1,12 +1,14 @@
 const { Router } = require("express");
-const favouriteRouter = Router();
+const favRouter = Router();
 
 
 const {
-  favouriteCharacter
+  favouriteCharacter,
+  unfavouriteCharacter
 } = require("./controllers");
 
 
-charRouter.post("/favouriteCharacter", favouriteCharacter);
+favRouter.post("/favChar", favouriteCharacter);
+favRouter.post("/unfavChar", unfavouriteCharacter);
 
-module.exports = charRouter;
+module.exports = favRouter;
