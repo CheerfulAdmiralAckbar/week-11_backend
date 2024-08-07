@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/connection");
 
+const Favourite = require('../favourite/model');
+
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
@@ -52,6 +54,14 @@ User.prototype.toJSON = function () {
   const values = { ...this.get() };
   delete values.password;
   return values;
+};
+
+User.associate = (models) => {
+  User.belongsToMany(models.Character, {
+    through: Favourite,
+    foreignKey: 'userId',
+    otherKey: 'characterName',
+  });
 };
 
 module.exports = User;

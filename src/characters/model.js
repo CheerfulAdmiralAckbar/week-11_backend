@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/connection");
 
+const Favourite = require('../favourite/model');
+
 const Character = sequelize.define(
   "character",
   {
@@ -35,5 +37,13 @@ const Character = sequelize.define(
     modelName: "character",
   }
 );
+
+Character.associate = (models) => {
+  Character.belongsToMany(models.User, {
+    through: Favourite,
+    foreignKey: 'characterName',
+    otherKey: 'userId',
+  });
+};
 
 module.exports = Character;
