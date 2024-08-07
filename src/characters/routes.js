@@ -1,15 +1,14 @@
 const { Router } = require("express");
 const charRouter = Router();
 
-
 const {
   addCharacter,
   deleteCharacter,
   getAllCharacters,
   getCharacter,
-    updateCharacter
+  updateCharacter,
+  getCharactersByName,
 } = require("./controllers");
-
 
 charRouter.post("/addCharacter", addCharacter);
 
@@ -20,5 +19,7 @@ charRouter.get("/getAllCharacters", getAllCharacters);
 charRouter.get("/getCharacter/:name", getCharacter);
 
 charRouter.put("/updateCharacter/:id", updateCharacter);
+
+charRouter.get("/search/name", getCharactersByName);
 
 module.exports = charRouter;
