@@ -42,9 +42,9 @@ const syncTables = async () => {
     });
 
     // Sync tables
-    await User.sync({ alter: true });
-    await Character.sync({ alter: true });
-    await Favourite.sync({ alter: true });
+    await User.sync();
+    await Character.sync();
+    await Favourite.sync();
 
     console.log("Tables synced successfully");
   } catch (error) {
