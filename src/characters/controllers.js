@@ -14,15 +14,40 @@ const addCharacter = async (req, res) => {
 const updateCharacter = async (req, res) => {
   console.log(req.body);
   try {
-    const updateInformation = await Character.update(req.body.updateFields, {
+    const existingCharacter = await Character.findOne({
+      where: { id: req.params.id },
+    });
+    if (!existingCharacter) {
+      return res.status(404).json({ message: "Character not found" });
+    }
+
+    const updateFields = req.body.updateFields || {};
+    const updatedData = {};
+
+    for (const key in updateFields) {
+      if (
+        updateFields[key] !== undefined &&
+        updateFields[key] !== null &&
+        updateFields[key] !== ""
+      ) {
+        updatedData[key] = updateFields[key];
+      }
+    }
+
+    await Character.update(updatedData, {
       where: {
         id: req.params.id,
       },
     });
-    const user = await Character.findOne({where: {id: req.params.id}})
-    res
-      .status(200)
-      .json({ message: "Successfully updated character information", updateInformation, user });
+
+    const updatedCharacter = await Character.findOne({
+      where: { id: req.params.id },
+    });
+
+    res.status(200).json({
+      message: "Successfully updated character information",
+      updatedCharacter,
+    });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
