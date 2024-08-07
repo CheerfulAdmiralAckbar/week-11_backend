@@ -4,7 +4,7 @@ const addCharacter = async (req, res) => {
   console.log("req: ", req.body);
   try {
     const character = await Character.create(req.body);
-
+    console.log(character);
     res.status(201).json({ message: "success", character: character });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
@@ -12,16 +12,17 @@ const addCharacter = async (req, res) => {
 };
 
 const updateCharacter = async (req, res) => {
+  console.log(req.body);
   try {
     const updateInformation = await Character.update(req.body.updateFields, {
       where: {
-        name: req.params.name,
+        id: req.params.id,
       },
     });
-
+    const user = await Character.findOne({where: {id: req.params.id}})
     res
       .status(200)
-      .json({ message: "Successfully updated character information" });
+      .json({ message: "Successfully updated character information", updateInformation, user });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
