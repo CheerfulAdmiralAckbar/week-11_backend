@@ -6,7 +6,6 @@ const Character = sequelize.define(
   {
     name: {
       type: DataTypes.STRING,
-      primaryKey: true,
       allowNull: false,
     },
     age: {
@@ -25,10 +24,10 @@ const Character = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
   },
   {
     tableName: "characters",

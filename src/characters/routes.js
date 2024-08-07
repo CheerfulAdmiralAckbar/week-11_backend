@@ -19,6 +19,6 @@ charRouter.get("/getAllCharacters", getAllCharacters);
 
 charRouter.get("/getCharacter/:name", getCharacter);
 
-charRouter.put("/updateCharacter/:name", updateCharacter);
+charRouter.put("/updateCharacter/:id", updateCharacter);
 
 module.exports = charRouter;
