@@ -1,5 +1,6 @@
 const User = require("../users/model");
 const Character = require("./model");
+const { Op } = require("sequelize");
 
 const addCharacter = async (req, res) => {
   console.log("req: ", req.body);
@@ -19,10 +20,6 @@ const updateCharacter = async (req, res) => {
         name: req.params.name,
       },
     });
-
-    res
-      .status(200)
-      .json({ message: "Successfully updated character information" });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
@@ -95,6 +92,31 @@ const getUserCharacters = async (req, res) => {
 };
 
 
+//This is an improved version of the getCharacter function that utilizes the 'like' operator from React
+//allowing the search to find partial matches instead of exact matches
+
+//Example: if the the User enters 'Bran' it will show 'Brandon' and any other name where 'Bran' appears
+const getCharactersByName = async (req, res) => {
+  try {
+    const characters = await Character.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${req.query.name}%`,
+        },
+      },
+    });
+
+    if (!characters || characters.length === 0) {
+      return res.status(404).json({ message: "No characters found" });
+    }
+
+    res. status(200).json({ message: "Success", characters });
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+};
+
+
 module.exports = {
   addCharacter: addCharacter,
   deleteCharacter: deleteCharacter,
@@ -104,5 +126,6 @@ module.exports = {
   getAllCharacters: getAllCharacters,
 
   getCharacter: getCharacter,
-  getUserCharacters: getUserCharacters
+  getUserCharacters: getUserCharacters,
+  getCharactersByName: getCharactersByName
 };

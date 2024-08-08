@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/connection");
 
-const Favourite = require('../favourite/model');
+const Favourite = require("../favourite/model");
 
 const Character = sequelize.define(
   "character",
@@ -26,7 +26,7 @@ const Character = sequelize.define(
       allowNull: true,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     book: {
@@ -47,8 +47,8 @@ const Character = sequelize.define(
 Character.associate = (models) => {
   Character.belongsToMany(models.User, {
     through: Favourite,
-    foreignKey: 'characterId',
-    otherKey: 'userId',
+    foreignKey: "characterId",
+    otherKey: "userId",
   });
 };
 
