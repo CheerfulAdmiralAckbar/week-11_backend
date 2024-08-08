@@ -27,6 +27,15 @@ const syncTables = async () => {
     // Disable foreign key checks
     await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
+    // Drop the primary key from the characters table if it exists
+    await sequelize.query('ALTER TABLE characters DROP PRIMARY KEY');
+
+    // Add the id column if it doesn't exist
+    await sequelize.query('ALTER TABLE characters ADD COLUMN id INTEGER');
+
+    // Set the id column as the primary key
+    await sequelize.query('ALTER TABLE characters MODIFY COLUMN id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY');
+
     // Set up relationships
     User.hasMany(Character, { foreignKey: 'userId' });
     Character.belongsTo(User, { foreignKey: 'userId' });
@@ -43,7 +52,7 @@ const syncTables = async () => {
       otherKey: 'userId' 
     });
 
-    // Sync tables in order of dependencies
+    // Sync tables
     await User.sync({ alter: true });
     await Character.sync({ alter: true });
     await Favourite.sync({ alter: true });
