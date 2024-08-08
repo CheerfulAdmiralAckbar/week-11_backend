@@ -7,8 +7,12 @@ const {
   getAllCharacters,
   getCharacter,
   updateCharacter,
-  getCharactersByName,
+  getUserCharacters,
+  getCharactersByName
 } = require("./controllers");
+
+const { verifyToken } = require("../middleware/auth");
+
 
 charRouter.post("/addCharacter", addCharacter);
 
@@ -20,6 +24,9 @@ charRouter.get("/getCharacter/:name", getCharacter);
 
 charRouter.put("/updateCharacter/:id", updateCharacter);
 
+charRouter.get("/getUserCharacters/:userId", getUserCharacters);
+
 charRouter.get("/search/name", getCharactersByName);
+
 
 module.exports = charRouter;
