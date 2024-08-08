@@ -24,10 +24,12 @@ app.use("/favourite", favRouter);
 
 const syncTables = async () => {
   try {
+    // Disable foreign key checks
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+
     // Set up relationships
     User.hasMany(Character, { foreignKey: 'userId' });
     Character.belongsTo(User, { foreignKey: 'userId' });
-
     User.belongsToMany(Character, { 
       through: Favourite, 
       as: 'FavoriteCharacters', 
@@ -41,10 +43,13 @@ const syncTables = async () => {
       otherKey: 'userId' 
     });
 
-    // Sync tables
-    await User.sync();
-    await Character.sync();
-    await Favourite.sync();
+    // Sync tables in order of dependencies
+    await User.sync({ alter: true });
+    await Character.sync({ alter: true });
+    await Favourite.sync({ alter: true });
+
+    // Re-enable foreign key checks
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
     console.log("Tables synced successfully");
   } catch (error) {
