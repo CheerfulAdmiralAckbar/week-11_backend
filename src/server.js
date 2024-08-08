@@ -24,17 +24,11 @@ app.use("/favourite", favRouter);
 
 const syncTables = async () => {
   try {
+    console.log("Starting table sync...");
+
     // Disable foreign key checks
     await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-
-    // Drop the primary key from the characters table if it exists
-    await sequelize.query('ALTER TABLE characters DROP PRIMARY KEY');
-
-    // Add the id column if it doesn't exist
-    await sequelize.query('ALTER TABLE characters ADD COLUMN id INTEGER');
-
-    // Set the id column as the primary key
-    await sequelize.query('ALTER TABLE characters MODIFY COLUMN id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY');
+    console.log("Foreign key checks disabled");
 
     // Set up relationships
     User.hasMany(Character, { foreignKey: 'userId' });
@@ -51,18 +45,28 @@ const syncTables = async () => {
       foreignKey: 'characterId', 
       otherKey: 'userId' 
     });
+    console.log("Relationships set up");
 
     // Sync tables
+    console.log("Syncing User table...");
     await User.sync({ alter: true });
+    console.log("User table synced");
+
+    console.log("Syncing Character table...");
     await Character.sync({ alter: true });
+    console.log("Character table synced");
+
+    console.log("Syncing Favourite table...");
     await Favourite.sync({ alter: true });
+    console.log("Favourite table synced");
 
     // Re-enable foreign key checks
     await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+    console.log("Foreign key checks re-enabled");
 
-    console.log("Tables synced successfully");
+    console.log("All tables synced successfully");
   } catch (error) {
-    console.error("Error syncing tables:", error);
+    console.error("Error during table sync:", error);
   }
 };
 
