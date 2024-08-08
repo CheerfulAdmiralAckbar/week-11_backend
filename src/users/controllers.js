@@ -1,6 +1,8 @@
 const User = require("./model");
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
+const jwt = require("jsonwebtoken");
+
 const createUser = async (req, res) => {
   console.log("Request Body: ", req.body);
   try {
@@ -47,7 +49,8 @@ const login = async (req, res) => {
 
     const characters = await user.getCharacters();
 
-    res.status(201).json({ message: "success", user, characters });
+    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ message: "success", user, token, characters });
   } catch (error) {
     if (!res.headersSent) {
       res.status(500).json({ message: error.message, error: error });
@@ -130,9 +133,28 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const verifyTokenController = async (req, res) => {
+  // Getting to this point means the token is valid so just return the user
+  try {
+    // req.user should contain the userId from the token
+    const user = await User.findByPk(req.user.userId, {
+      attributes: ['id', 'username', 'email'] 
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 module.exports = {
   createUser,
   login,
   updateAccount,
   deleteAccount,
+  verifyTokenController
 };
