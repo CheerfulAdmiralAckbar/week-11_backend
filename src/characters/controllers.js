@@ -42,17 +42,14 @@ const updateCharacter = async (req, res) => {
       },
     });
 
-
-
-    const updatedCharacter = await Character.findOne({
-      where: { id: req.params.id },
+    const allCharacters = await Character.findAll({
+      where: { userId: existingCharacter.userId },
     });
 
     res.status(200).json({
       message: "Successfully updated character information",
-      updatedCharacter,
+      allCharacters,
     });
-
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
@@ -95,7 +92,7 @@ const getCharacter = async (req, res) => {
       return res.status(404).json({ message: "Character not found" });
     }
 
-    res.status(200).json({ message: "Success", character});
+    res.status(200).json({ message: "Success", character });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
@@ -108,22 +105,24 @@ const getUserCharacters = async (req, res) => {
     const user = await User.findByPk(userId);
 
     console.log(`user: ${user}`);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
+
     const characters = await Character.findAll({
-      where: { UserId: userId }
+      where: { UserId: userId },
     });
-    
+
     res.status(200).json({ characters });
   } catch (error) {
-    console.error('Error fetching user characters:', error);
-    res.status(500).json({ message: "Error fetching user characters", error: error.message });
+    console.error("Error fetching user characters:", error);
+    res.status(500).json({
+      message: "Error fetching user characters",
+      error: error.message,
+    });
   }
 };
-
 
 //This is an improved version of the getCharacter function that utilizes the 'like' operator from React
 //allowing the search to find partial matches instead of exact matches
@@ -143,12 +142,11 @@ const getCharactersByName = async (req, res) => {
       return res.status(404).json({ message: "No characters found" });
     }
 
-    res. status(200).json({ message: "Success", characters });
+    res.status(200).json({ message: "Success", characters });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
 };
-
 
 module.exports = {
   addCharacter: addCharacter,
@@ -160,5 +158,5 @@ module.exports = {
 
   getCharacter: getCharacter,
   getUserCharacters: getUserCharacters,
-  getCharactersByName: getCharactersByName
+  getCharactersByName: getCharactersByName,
 };
